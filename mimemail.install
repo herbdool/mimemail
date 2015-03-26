@@ -17,7 +17,7 @@ function mimemail_enable() {
     )
   );
 
-  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('edit mimemail user settings'));
+  user_role_grant_permissions(BACKDROP_AUTHENTICATED_RID, array('edit mimemail user settings'));
 }
 
 /**
@@ -25,31 +25,7 @@ function mimemail_enable() {
  */
 function mimemail_disable() {
   mailsystem_clear(array('mimemail' => 'MimeMailSystem'));
-  variable_set('mimemail_alter', FALSE);
-}
-
-/**
- * Implements hook_uninstall().
- */
-function mimemail_uninstall() {
-  $variables = array(
-    'mimemail_alter',
-    'mimemail_crlf',
-    'mimemail_engine',
-    'mimemail_incoming',
-    'mimemail_key',
-    'mimemail_textonly',
-    'mimemail_sitestyle',
-    'mimemail_name',
-    'mimemail_mail',
-    'mimemail_format',
-    'mimemail_simple_address',
-    'mimemail_linkonly',
-    'mimemail_preserve_class'
-  );
-  foreach ($variables as $variable) {
-    variable_del($variable);
-  }
+  config_get('mimemail.settings', 'mimemail_alter');
 }
 
 /**
@@ -71,7 +47,7 @@ function mimemail_requirements($phase) {
   if ( module_enable(array('mailsystem'))
     && module_load_include('module', 'mailsystem')
   ) {
-    drupal_set_message(
+    backdrop_set_message(
       t('The %mailsystem module has been enabled because the %mimemail module now requires it.', $args)
     );
     return array();
@@ -88,26 +64,44 @@ function mimemail_requirements($phase) {
   );
 }
 
-/**
- * Check installation requirements.
- */
-function mimemail_update_7000() {
-  if ($requirements = mimemail_requirements('runtime')) {
-    throw new DrupalUpdateException($requirements['mimemail_mailsystem']['description']);
-  }
-}
 
-/**
- * Deletes useless variables.
- */
-function mimemail_update_7001() {
-  variable_del('mimemail_theme');
-}
 
-/**
- * Generate new key for authenticating incoming messages.
- */
-function mimemail_update_7002() {
-  variable_set('mimemail_key', drupal_random_key());
-  return t('Mime Mail has generated a new key to authenticate incoming messages.');
+
+function migrate_update_1000() {
+  $config = config('migrate.settings');
+
+  // migrate variables
+  $config->set('mimemail_crlf', update_variable_get('mimemail_crlf'));
+  $config->set('mimemail_linkonly', update_variable_get('mimemail_linkonly'));
+  $config->set('mimemail_alter', update_variable_get('mimemail_alter'));
+  $config->set('mimemail_key', update_variable_get('mimemail_key'));
+  $config->set('mimemail_incoming', update_variable_get('mimemail_incoming'));
+
+  $config->set('mimemail_simple_address', update_variable_get('mimemail_simple_address'));
+  $config->set('mimemail_engine', update_variable_get('mimemail_engine'));
+  $config->set('mimemail_name', update_variable_get('mimemail_name'));
+  $config->set('mimemail_mail', update_variable_get('mimemail_mail'));
+  $config->set('mimemail_textonly', update_variable_get('mimemail_textonly'));
+
+  $config->set('mimemail_sitestyle', update_variable_get('mimemail_sitestyle'));
+  $config->set('mimemail_preserve_class', update_variable_get('mimemail_preserve_class'));
+  $config->set('mimemail_format', update_variable_get('mimemail_format'));
+  $config->save();
+
+  // Delete variables.
+  update_variable_del('mimemail_crlf');
+  update_variable_del('mimemail_linkonly');
+  update_variable_del('mimemail_format');
+  update_variable_del('mimemail_alter');
+  update_variable_del('mimemail_key');
+
+  update_variable_del('mimemail_incoming');
+  update_variable_del('mimemail_simple_address');
+  update_variable_del('mimemail_engine');
+  update_variable_del('mimemail_name');
+  update_variable_del('mimemail_mail');
+
+  update_variable_del('mimemail_textonly');
+  update_variable_del('mimemail_sitestyle');
+  update_variable_del('mimemail_preserve_class');
 }

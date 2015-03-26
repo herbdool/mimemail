@@ -12,7 +12,7 @@ require_once(dirname(__FILE__) . '/../modules/mimemail_compress/mimemail_compres
 /**
  * Tests helper functions from the Mime Mail Compress module.
  */
-class MimeMailCompressUnitTestCase extends DrupalUnitTestCase {
+class MimeMailCompressUnitTestCase extends BackdropUnitTestCase {
   public static function getInfo() {
     return array(
       'name' => 'Mime Mail Compress unit tests',
@@ -22,7 +22,7 @@ class MimeMailCompressUnitTestCase extends DrupalUnitTestCase {
   }
 
   function setUp() {
-    drupal_load('module', 'mimemail_compress');
+    backdrop_load('module', 'mimemail_compress');
     parent::setUp();
   }
 

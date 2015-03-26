@@ -6,7 +6,7 @@
  */
 
 /**
- * Modify the Drupal mail system to send HTML emails.
+ * Modify the Backdrop mail system to send HTML emails.
  */
 class MimeMailSystem implements MailSystemInterface {
   /**
@@ -25,10 +25,10 @@ class MimeMailSystem implements MailSystemInterface {
     }
 
     if (preg_match('/plain/', $message['headers']['Content-Type'])) {
-      $message['body'] = check_markup($message['body'], variable_get('mimemail_format', filter_fallback_format()));
+      $message['body'] = check_markup($message['body'], config_get('mimemail.settings', 'mimemail_format'));
     }
 
-    $engine = variable_get('mimemail_engine', 'mimemail');
+    $engine = config_get('mimemail.settings', 'mimemail_engine');
     $mailengine = $engine . '_mailengine';
     $engine_prepare_message = $engine . '_prepare_message';
 
@@ -42,7 +42,7 @@ class MimeMailSystem implements MailSystemInterface {
     return $message;
   }
   /**
-   * Send an HTML e-mail message, using Drupal variables and default settings.
+   * Send an HTML e-mail message, using Backdrop variables and default settings.
    *
    * @param array $message
    *   A message array, as described in hook_mail_alter() with optional
@@ -52,7 +52,7 @@ class MimeMailSystem implements MailSystemInterface {
    *   TRUE if the mail was successfully accepted, otherwise FALSE.
    */
   public function mail(array $message) {
-    $engine = variable_get('mimemail_engine', 'mimemail');
+    $engine = config_get('mimemail.settings', 'mimemail_engine');
     $mailengine = $engine . '_mailengine';
 
     if (!$engine || !function_exists($mailengine)) {

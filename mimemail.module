@@ -9,12 +9,12 @@
  * Implements hook_menu().
  */
 function mimemail_menu() {
-  $path = drupal_get_path('module', 'mimemail') . '/includes';
+  $path = backdrop_get_path('module', 'mimemail') . '/includes';
   // Configuration links.
   $items['admin/config/system/mimemail'] = array(
     'title' => 'Mime Mail',
     'description' => 'Manage mime mail system settings.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('mimemail_admin_settings'),
     'access arguments' => array('administer site configuration'),
     'file' => 'mimemail.admin.inc',
@@ -51,7 +51,7 @@ function mimemail_permission() {
  * Access callback to process incoming messages.
  */
 function mimemail_incoming_access() {
-  return variable_get('mimemail_incoming', FALSE);
+  return config_get('mimemail.settings', 'mimemail_incoming');
 }
 
 /**
@@ -238,7 +238,7 @@ function mimemail_mailengine($op, $message = array()) {
         }
       }
 
-      $crlf = variable_get('mimemail_crlf', MAIL_LINE_ENDINGS);
+      $crlf = config_get('mimemail.settings', 'mimemail_crlf');
 
       $recipients = (!is_array($message['to'])) ? array($message['to']) : $message['to'];
       $subject = mime_header_encode($message['subject']);
@@ -287,7 +287,7 @@ function mimemail_mailengine($op, $message = array()) {
  *   - attachments: An array of arrays which describe one or more attachments.
  *     Existing files can be added by path, dinamically-generated files
  *     can be added by content. The internal array contains the following elements:
- *      - filepath: Relative Drupal path to an existing file (filecontent is NULL).
+ *      - filepath: Relative Backdrop path to an existing file (filecontent is NULL).
  *      - filecontent: The actual content of the file (filepath is NULL).
  *      - filename: The filename of the file.
  *      - filemime: The MIME type of the file.
@@ -321,15 +321,15 @@ function mimemail_prepare_message($message) {
   $plaintext = isset($message['params']['plaintext']) ? $message['params']['plaintext'] : NULL;
   $attachments = isset($message['params']['attachments']) ? $message['params']['attachments'] : array();
 
-  $site_name = variable_get('site_name', 'Drupal');
-  $site_mail = variable_get('site_mail', ini_get('sendmail_from'));
-  $simple_address = variable_get('mimemail_simple_address', 0);
+  $site_name = config_get('system.core', 'site_name');
+  $site_mail = config_get('system.core', 'site_mail');
+  $simple_address = config_get('mimemail.settings', 'mimemail_simple_address');
 
   // Override site mails default sender when using default engine.
   if ((empty($from) || $from == $site_mail)
-      && variable_get('mimemail_engine', 'mimemail') == 'mimemail') {
-    $mimemail_name = variable_get('mimemail_name', $site_name);
-    $mimemail_mail = variable_get('mimemail_mail', $site_mail);
+      && config_get('mimemail.settings', 'mimemail_engine') == 'mimemail') {
+    $mimemail_name = config_get('mimemail.settings', 'mimemail_name');
+    $mimemail_mail = config_get('mimemail.settings', 'mimemail_mail');
     $from = array(
       'name' => !empty($mimemail_name) ? $mimemail_name : $site_name,
       'mail' => !empty($mimemail_mail) ? $mimemail_mail : $site_mail,
@@ -354,8 +354,8 @@ function mimemail_prepare_message($message) {
     }
   }
 
-  // Removing newline character introduced by _drupal_wrap_mail_line();
-  $subject = str_replace(array("\n"), '', trim(drupal_html_to_text($subject)));
+  // Removing newline character introduced by _backdrop_wrap_mail_line();
+  $subject = str_replace(array("\n"), '', trim(backdrop_html_to_text($subject)));
 
   $hook = array(
     'mimemail_message__' . $key,
@@ -377,7 +377,7 @@ function mimemail_prepare_message($message) {
     $function($body, $key);
   }
 
-  $plain = $plain || variable_get('mimemail_textonly', 0);
+  $plain = $plain || config_get('mimemail.settings', 'mimemail_textonly');
   $from = mimemail_address($from);
   $mail = mimemail_html_body($body, $subject, $plain, $plaintext, $attachments);
   $headers = array_merge($message['headers'], $headers, $mail['headers']);

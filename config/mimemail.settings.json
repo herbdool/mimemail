@@ -1,0 +1,18 @@
+{
+    "_config_name": "mimemail.settings",
+    "mimemail_crlf": "MAIL_LINE_ENDINGS",
+    "mimemail_linkonly": "0",
+    "mimemail_alter": "FALSE",
+    "mimemail_key": "",
+    "mimemail_incoming": "FALSE",
+
+    "mimemail_simple_address": "0",
+    "mimemail_engine": "mimemail",
+    "mimemail_name": "",
+    "mimemail_mail": "FALSE",
+    "mimemail_textonly": "0",
+
+    "mimemail_sitestyle": "0",
+    "mimemail_preserve_class": "0",
+    "mimemail_format": ""
+}

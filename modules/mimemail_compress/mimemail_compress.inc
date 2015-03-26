@@ -134,7 +134,7 @@ class mimemail_compress {
           $compressed = array_merge($old_style, $new_style);
           $style = '';
           foreach ($compressed as $k => $v) {
-            $style .= (drupal_strtolower($k) . ':' . $v . ';');
+            $style .= (backdrop_strtolower($k) . ':' . $v . ';');
           }
         }
         else {
@@ -159,7 +159,7 @@ class mimemail_compress {
       $node->parentNode->removeChild($node);
     }
 
-    if (variable_get('mimemail_preserve_class', 0) == FALSE) {
+    if (config_get('mimemail.settings', 'mimemail_preserve_class') == FALSE) {
       $nodes = $xpath->query('//*[@class]');
       foreach ($nodes as $node) {
         $node->removeAttribute('class');
@@ -202,7 +202,7 @@ class mimemail_compress {
    * @see http://plasmasturm.org/log/444
    */
   private function css_to_xpath($selector) {
-    if (drupal_substr($selector, 0, 1) == '/') {
+    if (backdrop_substr($selector, 0, 1) == '/') {
       // Already an XPath expression.
       return $selector;
     }

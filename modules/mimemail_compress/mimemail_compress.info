@@ -2,6 +2,7 @@ name = Mime Mail CSS Compressor
 description = Converts CSS to inline styles in an HTML message. (Requires the PHP DOM extension.)
 package = Mail
 dependencies[] = mimemail
-core = 7.x
+version = BACKDROP_VERSION
+backdrop = 1.x
 
 files[] = mimemail_compress.inc

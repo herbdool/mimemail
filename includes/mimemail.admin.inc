@@ -10,11 +10,11 @@
  */
 function mimemail_admin_settings() {
   // Check for the existence of a mail.css file in the default theme folder.
-  $theme = variable_get('theme_default', NULL);
-  $mailstyle = drupal_get_path('theme', $theme) . '/mail.css';
+  $theme = config_get('system.core', 'theme_default');
+  $mailstyle = backdrop_get_path('theme', $theme) . '/mail.css';
   // Disable site style sheets including option if found.
   if (is_file($mailstyle)) {
-    variable_set('mimemail_sitestyle', 0);
+    config_get('mimemail.settings', 'mimemail_sitestyle');
     $disable_sitestyle = TRUE;
   }
   else {
@@ -25,7 +25,7 @@ function mimemail_admin_settings() {
   $form['mimemail']['mimemail_name'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Sender name'),
-    '#default_value' => variable_get('mimemail_name', variable_get('site_name', 'Drupal')),
+    '#default_value' => config_get('mimemail.settings', 'mimemail_name'),
     '#size'          => 60,
     '#maxlength'     => 128,
     '#description'   => t('The name that all site emails will be from when using default engine.'),
@@ -33,7 +33,7 @@ function mimemail_admin_settings() {
   $form['mimemail']['mimemail_mail'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Sender e-mail address'),
-    '#default_value' => variable_get('mimemail_mail', variable_get('site_mail', ini_get('sendmail_from'))),
+    '#default_value' => config_get('mimemail.settings', 'mimemail_mail'),
     '#size'          => 60,
     '#maxlength'     => 128,
     '#description'   => t('The email address that all site e-mails will be from when using default engine.'),
@@ -41,33 +41,33 @@ function mimemail_admin_settings() {
   $form['mimemail']['mimemail_simple_address'] = array(
     '#type'          => 'checkbox',
     '#title'         => t('Use simple address format'),
-    '#default_value' => variable_get('mimemail_simple_address', FALSE),
+    '#default_value' => config_get('mimemail.settings', 'mimemail_simple_address'),
     '#description' => t('Use the simple format of user@example.com for all recipient email addresses.'),
   );
   $form['mimemail']['mimemail_sitestyle'] = array(
     '#type'          => 'checkbox',
     '#title'         => t('Include site style sheets'),
-    '#default_value' => variable_get('mimemail_sitestyle', TRUE),
+    '#default_value' => config_get('mimemail.settings', 'mimemail_sitestyle'),
     '#description'   => t('Gather all style sheets when no mail.css found in the default theme directory.'),
     '#disabled'      => $disable_sitestyle,
   );
   $form['mimemail']['mimemail_textonly'] = array(
     '#type' => 'checkbox',
     '#title' => t('Send plain text email only'),
-    '#default_value' => variable_get('mimemail_textonly', FALSE),
+    '#default_value' => config_get('mimemail.settings', 'mimemail_textonly'),
     '#description' => t('This option disables the use of email messages with graphics and styles. All messages will be converted to plain text.'),
   );
   $form['mimemail']['mimemail_linkonly'] = array(
     '#type'          => 'checkbox',
     '#title'         => t('Link images only'),
-    '#default_value' => variable_get('mimemail_linkonly', 0),
+    '#default_value' => config_get('mimemail.settings', 'mimemail_linkonly'),
     '#description'   => t('This option disables the embedding of images. All image will be available as external content. This can make email messages much smaller.'),
   );
   if (module_exists('mimemail_compress')) {
     $form['mimemail']['mimemail_preserve_class'] = array(
       '#type' => 'checkbox',
       '#title' => t('Preserve class attributes'),
-      '#default_value' => variable_get('mimemail_preserve_class', 0),
+      '#default_value' => config_get('mimemail.settings', 'mimemail_preserve_class'),
       '#description' => t('This option disables the removing of class attributes from the message source. Useful for debugging the style of the message.'),
     );
   }
@@ -81,7 +81,7 @@ function mimemail_admin_settings() {
     '#type' => 'select',
     '#title' => t('E-mail format'),
     '#options' => $format_options,
-    '#default_value' => variable_get('mimemail_format', filter_fallback_format()),
+    '#default_value' => config_get('mimemail.settings', 'mimemail_format'),
     '#access' => count($formats) > 1,
     '#attributes' => array('class' => array('filter-list')),
     '#description' => t('The filter set that will be applied to the message body.
@@ -99,13 +99,13 @@ function mimemail_admin_settings() {
   $form['mimemail']['advanced']['mimemail_incoming'] = array(
     '#type' => 'checkbox',
     '#title' => t('Process incoming messages posted to this site'),
-    '#default_value' => variable_get('mimemail_incoming', FALSE),
+    '#default_value' => config_get('mimemail.settings', 'mimemail_incoming'),
     '#description' => t('This is an advanced setting that should not be enabled unless you know what you are doing.'),
   );
   $form['mimemail']['advanced']['mimemail_key'] = array(
     '#type' => 'textfield',
     '#title' => t('Message validation string'),
-    '#default_value' => variable_get('mimemail_key', drupal_random_key()),
+    '#default_value' => config_get('mimemail.settings', 'mimemail_key'),
     '#required' => TRUE,
     '#description' => t('This string will be used to validate incoming messages. It can be anything, but must be used on both sides of the transfer.'),
   );
@@ -118,24 +118,24 @@ function mimemail_admin_settings() {
   // Hide the settings if only 1 engine is available.
   if (count($engines) == 1) {
     reset($engines);
-    variable_set('mimemail_engine', key($engines));
+    config_get('mimemail.settings', 'mimemail_engine');
     $form['mimemail']['mimemail_engine'] = array(
       '#type' => 'hidden',
-      '#value' => variable_get('mimemail_engine', 'mimemail'),
+      '#value' => config_get('mimemail.settings', 'mimemail_engine'),
     );
   }
   else {
     $form['mimemail']['mimemail_engine'] = array(
       '#type' => 'select',
       '#title' => t('E-mail engine'),
-      '#default_value' => variable_get('mimemail_engine', 'mimemail'),
+      '#default_value' => config_get('mimemail.settings', 'mimemail_engine'),
       '#options' => $engine_options,
       '#description' => t('Choose an engine for sending mails from your site.'),
     );
   }
 
-  if (variable_get('mimemail_engine', 'mail')) {
-    $settings = module_invoke(variable_get('mimemail_engine', 'mimemail'), 'mailengine', 'settings');
+  if (config_get('mimemail.settings', 'mimemail_engine')) {
+    $settings = module_invoke(config_get('mimemail.settings', 'mimemail_engine'), 'mailengine', 'settings');
     if ($settings) {
       $form['mimemail']['engine_settings'] = array(
         '#type' => 'fieldset',
@@ -147,8 +147,32 @@ function mimemail_admin_settings() {
     }
   }
   else {
-    drupal_set_message(t('Please choose a mail engine.'), 'error');
+    backdrop_set_message(t('Please choose a mail engine.'), 'error');
   }
 
-  return system_settings_form($form);
+  $form['#submit'][] = 'mimemail_admin_settings_submit';
+  // Add a submit button
+  $form['actions']['#type'] = 'actions';
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save configuration'),
+  );
+  // Return the form!
+  return $form;
+}
+
+
+
+/**
+ * Form submission handler for mimemail_configuration_form().
+ */
+function mimemail_admin_settings_submit($form, &$form_state) {
+$config = config('mimemail.settings');
+foreach ($form_state['values'] as $key => $value)
+{
+$config->set($key, $value);
+}
+
+$config->save();
+backdrop_set_message(t('The configuration options have been saved.'));
 }

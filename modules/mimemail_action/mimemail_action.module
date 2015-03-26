@@ -20,7 +20,7 @@ function mimemail_action_info() {
 }
 
 /**
- * Implements a configurable Drupal action. Sends an email.
+ * Implements a configurable Backdrop action. Sends an email.
  */
 function mimemail_send_email_action($entity, $context) {
   if (empty($context['node'])) {
@@ -57,11 +57,11 @@ function mimemail_send_email_action($entity, $context) {
     'attachments' => $context['attachments'],
   );
 
-  drupal_mail('mimemail', $context['key'], $to, $language, $params);
+  backdrop_mail('mimemail', $context['key'], $to, $language, $params);
 }
 
 /**
- * Form for configurable Drupal action to send an HTML mail.
+ * Form for configurable Backdrop action to send an HTML mail.
  */
 function mimemail_send_email_action_form($context) {
   $context += array(

@@ -6,7 +6,7 @@
  */
 
 function mimemail_theme_theme() {
-  $path = drupal_get_path('module', 'mimemail') . '/theme';
+  $path = backdrop_get_path('module', 'mimemail') . '/theme';
 
   return array(
     'mimemail_message' => array(
@@ -33,9 +33,9 @@ function mimemail_theme_theme() {
  */
 function template_preprocess_mimemail_message(&$variables) {
   $theme = mailsystem_get_mail_theme();
-  $themepath = drupal_get_path('theme', $theme);
+  $themepath = backdrop_get_path('theme', $theme);
 
-  $sitestyle = variable_get('mimemail_sitestyle', 1);
+  $sitestyle = config_get('mimemail.settings','mimemail_sitestyle');
   $mailstyles = file_scan_directory($themepath, '#^mail\.css*$#');
 
   // Check recursively for the existence of a mail.css file in the theme folder.
@@ -50,10 +50,10 @@ function template_preprocess_mimemail_message(&$variables) {
     // Grab local.css if it exists (support for Fusion based themes).
     $local = $themepath . '/css/local.css';
     if (@file_exists($local)) {
-      $css_all = drupal_add_css($local, array('group' => CSS_THEME));
+      $css_all = backdrop_add_css($local, array('group' => CSS_THEME));
     }
     else {
-      $css_all = drupal_add_css();
+      $css_all = backdrop_add_css();
     }
     $css_files = array();
     foreach ($css_all as $key => $options) {
@@ -62,7 +62,7 @@ function template_preprocess_mimemail_message(&$variables) {
         $css_files[$key] = $options;
       }
     }
-    if (variable_get('preprocess_css', FALSE)) {
+    if (config_get('mimemail.settings','preprocess_css')) {
       $pattern = '|<link.*href="' . $GLOBALS['base_url'] . '/([^"?]*)[?"].*|';
       $replacement = '\1';
     }
@@ -74,7 +74,7 @@ function template_preprocess_mimemail_message(&$variables) {
       );
       $replacement = array('', '\1', '\1');
     }
-    $styles = preg_replace($pattern, $replacement, drupal_get_css($css_files));
+    $styles = preg_replace($pattern, $replacement, backdrop_get_css($css_files));
   }
 
   $css = '';
@@ -82,7 +82,7 @@ function template_preprocess_mimemail_message(&$variables) {
     // Process each style sheet.
     foreach (explode("\n", $styles) as $style) {
       if (!empty($style)) {
-        $css .= drupal_load_stylesheet($style, TRUE);
+        $css .= backdrop_load_stylesheet($style, TRUE);
       }
     }
 

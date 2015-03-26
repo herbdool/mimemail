@@ -12,7 +12,7 @@ require_once(dirname(__FILE__) . '/../mimemail.inc');
 /**
  * Tests helper functions from the Mime Mail module.
  */
-class MimeMailUnitTestCase extends DrupalUnitTestCase {
+class MimeMailUnitTestCase extends BackdropUnitTestCase {
   public static function getInfo() {
     return array(
       'name' => 'Mime Mail unit tests',
@@ -22,7 +22,7 @@ class MimeMailUnitTestCase extends DrupalUnitTestCase {
   }
 
   function setUp() {
-    drupal_load('module', 'mimemail');
+    backdrop_load('module', 'mimemail');
     parent::setUp();
   }
 
@@ -57,7 +57,7 @@ class MimeMailUnitTestCase extends DrupalUnitTestCase {
 /**
  * Tests functions from the Mime Mail module.
  */
-class MimeMailWebTestCase extends DrupalWebTestCase {
+class MimeMailWebTestCase extends BackdropWebTestCase {
   protected $adminUser;
 
   public static function getInfo() {
@@ -80,12 +80,12 @@ class MimeMailWebTestCase extends DrupalWebTestCase {
     $this->checkPermissions($permissions, TRUE);
 
     // Create and login user.
-    $this->adminUser = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->adminUser);
+    $this->adminUser = $this->backdropCreateUser($permissions);
+    $this->backdropLogin($this->adminUser);
   }
 
   public function testUrl() {
-    $this->drupalPost('admin/config/system/mimemail',
+    $this->backdropPost('admin/config/system/mimemail',
       array('mimemail_linkonly' => TRUE),
       t('Save configuration'));
 

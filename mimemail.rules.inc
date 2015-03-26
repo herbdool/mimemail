@@ -279,7 +279,7 @@ function rules_action_mimemail($key, $to, $cc = NULL, $bcc = NULL, $from_name = 
     'attachments' => $attachments,
   );
 
-  drupal_mail('mimemail', $key, $to, $language, $params, $from);
+  backdrop_mail('mimemail', $key, $to, $language, $params, $from);
 }
 
 /**
@@ -308,7 +308,7 @@ function rules_action_mimemail_to_users_of_role($key, $roles, $active, $from_nam
     $query->condition('u.status', 1, '=');
   }
 
-  if (in_array(DRUPAL_AUTHENTICATED_RID, $roles)) {
+  if (in_array(BACKDROP_AUTHENTICATED_RID, $roles)) {
     $query->condition('u.uid', 0, '>');
   }
   else {
@@ -343,7 +343,7 @@ function rules_action_mimemail_to_users_of_role($key, $roles, $active, $from_nam
       $language = $languages[$row->language];
     }
 
-    $message = drupal_mail('mimemail', $key, $row->mail, $language, $params, $from);
+    $message = backdrop_mail('mimemail', $key, $row->mail, $language, $params, $from);
     if (!$message['result']) {
       break;
     }

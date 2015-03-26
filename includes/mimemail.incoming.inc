@@ -16,22 +16,22 @@
  */
 function mimemail_post() {
   if (!isset($_POST['token']) || empty($_POST['token'])) {
-    return drupal_access_denied();
+    return backdrop_access_denied();
   }
 
   if (isset($_POST['message']) && !empty($_POST['message'])) {
-    $key = variable_get('mimemail_key', drupal_random_key());
+    $key = config_get('mimemail.settings', 'mimemail_key');
     $hash = hash_hmac('sha1', $_POST['message'], $key);
     if ($hash != $_POST['token']) {
       watchdog('access denied', 'Authentication error for POST e-mail', WATCHDOG_WARNING);
-      return drupal_access_denied();
+      return backdrop_access_denied();
     }
     else {
       return mimemail_incoming($_POST['message']);
     }
   }
 
-  return drupal_access_denied();
+  return backdrop_access_denied();
 }
 
 /**
@@ -64,7 +64,7 @@ function mimemail_parse($message) {
   $mail = mimemail_parse_headers($message);
 
   // Get an address-only version of "From" (useful for user_load() and such).
-  $mail['from'] = preg_replace('/.*\b([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4})\b.*/i', '\1', drupal_strtolower($mail['headers']['From']));
+  $mail['from'] = preg_replace('/.*\b([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4})\b.*/i', '\1', backdrop_strtolower($mail['headers']['From']));
 
   // Get a subject line, which may be cleaned up/modified later.
   $mail['subject'] = $mail['headers']['Subject'];
@@ -109,16 +109,16 @@ function mimemail_parse($message) {
   // Make sure our text and html parts are accounted for.
   if (isset($mail['html']) && !isset($mail['text'])) {
     $mail['text'] = preg_replace('|<style.*</style>|mis', '', $mail['html']);
-    $mail['text'] = drupal_html_to_text($mail['text']);
+    $mail['text'] = backdrop_html_to_text($mail['text']);
   }
   elseif (isset($mail['text']) && !isset($mail['html'])) {
-    $mail['html'] = check_markup($mail['text'], variable_get('mimemail_format', filter_fallback_format()));
+    $mail['html'] = check_markup($mail['text'], config_get('mimemail.settings', 'mimemail_format'));
   }
 
   // Last ditch attempt - use the body as-is.
   if (!isset($mail['text'])) {
     $mail['text'] = mimemail_parse_content($mail);
-    $mail['html'] = check_markup($mail['text'], variable_get('mimemail_format', filter_fallback_format()));
+    $mail['html'] = check_markup($mail['text'], config_get('mimemail.settings', 'mimemail_format'));
   }
 
   return $mail;
@@ -152,8 +152,8 @@ function mimemail_parse_headers($message) {
   $headers = array();
   foreach (explode("\n", trim($hdr)) as $row) {
     $split = strpos($row, ':');
-    $name = trim(drupal_substr($row, 0, $split));
-    $val = trim(drupal_substr($row, $split+1));
+    $name = trim(backdrop_substr($row, 0, $split));
+    $val = trim(backdrop_substr($row, $split+1));
     $headers[$name] = $val;
   }
 
@@ -169,7 +169,7 @@ function mimemail_parse_content($part) {
   $content = $part['body'];
 
   // Decode this part.
-  if ($encoding = drupal_strtolower($part['headers']['Content-Transfer-Encoding'])) {
+  if ($encoding = backdrop_strtolower($part['headers']['Content-Transfer-Encoding'])) {
     switch ($encoding) {
       case 'base64':
         $content = base64_decode($content);
@@ -185,7 +185,7 @@ function mimemail_parse_content($part) {
 
   // Try to convert character set to UTF-8.
   if (preg_match('/.*charset="?([^";]+)"?.*/', $part['headers']['Content-Type'], $m)) {
-    $content = drupal_convert_to_utf8($content, $m[1]);
+    $content = backdrop_convert_to_utf8($content, $m[1]);
   }
 
   return $content;

@@ -20,7 +20,7 @@
  */
 function mimemail_rfc_headers($headers) {
   $header = '';
-  $crlf = variable_get('mimemail_crlf', MAIL_LINE_ENDINGS);
+  $crlf = config_get('mimemail.settings', 'mimemail_crlf');
   foreach ($headers as $key => $value) {
     $key = trim($key);
     // Collapse spaces and get rid of newline characters.
@@ -28,7 +28,7 @@ function mimemail_rfc_headers($headers) {
     // Fold headers if they're too long.
     // A CRLF may be inserted before any WSP.
     // @see http://tools.ietf.org/html/rfc2822#section-2.2.3
-    if (drupal_strlen($value) > 60) {
+    if (backdrop_strlen($value) > 60) {
       // If there's a semicolon, use that to separate.
       if (count($array = preg_split('/;\s*/', $value)) > 1) {
         $value = trim(join(";$crlf ", $array));
@@ -54,7 +54,7 @@ function mimemail_rfc_headers($headers) {
  *   Overwrited headers.
  */
 function mimemail_headers($headers, $from = NULL) {
-  $default_from = variable_get('site_mail', ini_get('sendmail_from'));
+  $default_from = config_get('system.core', 'site_mail');
 
   // Overwrite standard headers.
   if ($from) {
@@ -79,7 +79,7 @@ function mimemail_headers($headers, $from = NULL) {
   }
 
   // Run all headers through mime_header_encode() to convert non-ascii
-  // characters to an rfc compliant string, similar to drupal_mail().
+  // characters to an rfc compliant string, similar to backdrop_mail().
   foreach ($headers as $key => $value) {
     // According to RFC 2047 addresses MUST NOT be encoded.
     if ($key !== 'From' && $key !== 'Sender') {
@@ -118,7 +118,7 @@ function mimemail_extract_files($html) {
   $encoding = '8Bit';
   $body = explode("\n", $content);
   foreach ($body as $line) {
-    if (drupal_strlen($line) > 998) {
+    if (backdrop_strlen($line) > 998) {
       $encoding = 'base64';
       break;
     }
@@ -168,7 +168,7 @@ function _mimemail_file($url = NULL, $content = NULL, $name = '', $type = '', $d
 
   if ($url) {
     $image = preg_match('!\.(png|gif|jpg|jpeg)$!i', $url);
-    $linkonly = variable_get('mimemail_linkonly', 0);
+    $linkonly = config_get('mimemail.settings', 'mimemail_linkonly');
     // The file exists on the server as-is. Allows for non-web-accessible files.
     if (@is_file($url) && $image && !$linkonly) {
       $file = $url;
@@ -182,7 +182,7 @@ function _mimemail_file($url = NULL, $content = NULL, $name = '', $type = '', $d
       }
       // The $url is a non-local URI that needs to be converted to a URL.
       else {
-        $file = (drupal_realpath($url)) ? drupal_realpath($url) : file_create_url($url);
+        $file = (backdrop_realpath($url)) ? backdrop_realpath($url) : file_create_url($url);
       }
     }
   }
@@ -197,7 +197,7 @@ function _mimemail_file($url = NULL, $content = NULL, $name = '', $type = '', $d
     if ($is_file) {
       $access = user_access('send arbitrary files');
       $public_path = file_default_scheme() . '://';
-      $in_public_path = strpos(@drupal_realpath($file), drupal_realpath($public_path)) === 0;
+      $in_public_path = strpos(@backdrop_realpath($file), backdrop_realpath($public_path)) === 0;
       if (!$in_public_path && !$access) {
         return $url;
       }
@@ -331,7 +331,7 @@ function mimemail_multipart_body($parts, $content_type = 'multipart/mixed; chars
 
       if (isset($part['file'])) {
         $file = (@is_file($part['file'])) ? file_get_contents($part['file']) : $part['file'];
-        $part_body = chunk_split(base64_encode($file), 76, variable_get('mimemail_crlf', "\n"));
+        $part_body = chunk_split(base64_encode($file), 76, config_get('mimemail.settings', 'mimemail_crlf'));
 
       }
     }
@@ -381,7 +381,7 @@ function mimemail_html_body($body, $subject, $plain = FALSE, $plaintext = NULL, 
     // @see http://drupal.org/node/370903
     // Pull out the message body.
     preg_match('|<body.*?</body>|mis', $body, $matches);
-    $plaintext = drupal_html_to_text($matches[0]);
+    $plaintext = backdrop_html_to_text($matches[0]);
   }
   if ($plain) {
     // Plain mail without attachment.
@@ -453,7 +453,7 @@ function _mimemail_url($url, $to_embed = NULL) {
   global $base_url;
   $url = urldecode($url);
 
-  $to_link = variable_get('mimemail_linkonly', 0);
+  $to_link = config_get('mimemail.settings', 'mimemail_linkonly');
   $is_image = preg_match('!\.(png|gif|jpg|jpeg)!i', $url);
   $is_absolute = file_uri_scheme($url) != FALSE || preg_match('!(mailto|callto|tel)\:!', $url);
 
@@ -507,7 +507,7 @@ function _mimemail_url($url, $to_embed = NULL) {
   }
 
   $options = array(
-    'query' => ($query) ? drupal_get_query_array($query) : array(),
+    'query' => ($query) ? backdrop_get_query_array($query) : array(),
     'fragment' => $fragment,
     'absolute' => TRUE,
     'language' => $language,
