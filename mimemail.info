@@ -4,7 +4,5 @@ dependencies[] = mailsystem
 package = Mail
 version = BACKDROP_VERSION
 backdrop = 1.x
-
+type = module
 configure = admin/config/system/mimemail
-
-files[] = includes/mimemail.mail.inc

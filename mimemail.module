@@ -6,6 +6,17 @@
  */
 
 /**
+ * Implements hook_config_info().
+ */
+function mimemail_config_info() {
+  $prefixes['mimemail.settings'] = array(
+    'label' => t('mimemail settings'),
+    'group' => t('mimemail'),
+  );
+  return $prefixes;
+}  
+ 
+/**
  * Implements hook_menu().
  */
 function mimemail_menu() {
