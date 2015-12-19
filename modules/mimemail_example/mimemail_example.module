@@ -54,11 +54,13 @@ function mimemail_example_form() {
   $form['from'] = array(
     '#type' => 'textfield',
     '#title' => t('Sender name'),
+    '#default_value' => config_get('mimemail.settings','mimemail_name')
   );
 
   $form['from_mail'] = array(
     '#type' => 'textfield',
     '#title' => t('Sender e-mail address'),
+    '#default_value' => config_get('mimemail.settings','mimemail_mail')
   );
 
   $form['params'] = array(
@@ -101,8 +103,8 @@ function mimemail_example_form() {
       '#type' => 'textarea',
       '#title' => t('Plain text message'),
     ),
-    'attachments' => array(
-      '#name' => 'files[attachment]',
+    'attachment' => array(
+			'#type' => 'managed_file',
       '#type' => 'file',
       '#title' => t('Choose a file to send as attachment'),
     ),
@@ -126,10 +128,9 @@ function mimemail_example_form_validate($form, &$form_state) {
     form_set_error('to', t('That e-mail address is not valid.'));
   }
 
-  $file = file_save_upload('attachment');
+  $file = file_load($values['params']['attachment']);
   if ($file) {
-    $file = file_move($file, 'public://');
-    $values['params']['attachments'][] = array(
+    $values['params']['attachments'][0] = array(
       'filepath' => $file->uri,
     );
   }
