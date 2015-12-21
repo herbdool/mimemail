@@ -17,7 +17,10 @@ function mimemail_enable() {
     )
   );
 
-  user_role_grant_permissions(BACKDROP_AUTHENTICATED_RID, array('edit mimemail user settings'));
+  $line_endings = settings_get('mail_line_endings', MAIL_LINE_ENDINGS);
+	config_set('mimemail.settings','mimemail_crlf',$line_endings);
+
+  user_role_grant_permissions(BACKDROP_AUTHENTICATED_ROLE, array('edit mimemail user settings'));
 }
 
 /**

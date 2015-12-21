@@ -111,7 +111,7 @@ function mimemail_user_view($account, $view_mode, $langcode) {
  * Adds the Mime Mail settings on the user settings page.
  */
 function mimemail_form_user_profile_form_alter(&$form, &$form_state) {
-  if ($form['#user_category'] == 'account') {
+  if (!empty($form['#user'])) {
     $account = $form['#user'];
     $form['mimemail'] = array(
       '#type' => 'fieldset',
@@ -132,7 +132,7 @@ function mimemail_form_user_profile_form_alter(&$form, &$form_state) {
 /**
  * Implements hook_user_presave().
  */
-function mimemail_user_presave(&$edit, $account, $category) {
+function mimemail_user_presave($account) {
   $edit['data']['mimemail_textonly'] = isset($edit['mimemail_textonly']) ? $edit['mimemail_textonly'] : 0;
 }
 
@@ -307,7 +307,7 @@ function mimemail_mailengine($op, $message = array()) {
  *      (
  *        [0] => Array
  *        (
- *         [filepath] => '/sites/default/files/attachment.txt'
+ *         [filepath] => '/files/attachment.txt'
  *         [filecontent] => 'My attachment.'
  *         [filename] => 'attachment.txt'
  *         [filemime] => 'text/plain'
@@ -401,3 +401,19 @@ function mimemail_prepare_message($message) {
 
   return $message;
 }
+
+/**
+ * Implements hook_autoload_info().
+
+ */
+function mimemail_autoload_info()
+{
+  return array(
+    'MimeMailUnitTestCase' => 'tests/mimemail.test',
+    'MimeMailWebTestCase' => 'tests/mimemail.test',
+    'MimeMailCompressUnitTestCase' => 'tests/mimemail_compress.test',
+    'MimeMailRulesTestCase' => 'tests/mimemail_rules.test',
+    'MimeMailSystem' => 'includes/mimemail.mail.inc',
+  );
+}
+

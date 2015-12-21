@@ -106,7 +106,7 @@ function mimemail_admin_settings() {
     '#type' => 'textfield',
     '#title' => t('Message validation string'),
     '#default_value' => config_get('mimemail.settings', 'mimemail_key'),
-    '#required' => TRUE,
+    '#required' => FALSE,
     '#description' => t('This string will be used to validate incoming messages. It can be anything, but must be used on both sides of the transfer.'),
   );
 
