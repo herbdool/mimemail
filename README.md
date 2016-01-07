@@ -58,15 +58,15 @@ Graham Oliver (github.com/Graham-72/)
 
 ### Port to Backdrop
 
-Graham Oliver (github.com/Graham-72)
-Andy Martha (github.com/biolithic)
++ Graham Oliver (github.com/Graham-72)
++ Andy Martha (github.com/biolithic)
 
 ### Maintainers for Drupal:
 
-Robert Castelo <https://www.drupal.org/user/3555>
-Gerhard Killesreiter <https://www.drupal.org/user/227>
-Allie Micka <https://www.drupal.org/user/15091>
-Gabor Seljan <https://www.drupal.org/user/232117>
++ Robert Castelo <https://www.drupal.org/user/3555>
++ Gerhard Killesreiter <https://www.drupal.org/user/227>
++ Allie Micka <https://www.drupal.org/user/15091>
++ Gabor Seljan <https://www.drupal.org/user/232117>
 
 ### Acknowledgement
 
