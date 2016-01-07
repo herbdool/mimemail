@@ -105,9 +105,9 @@ function mimemail_example_form() {
     ),
     'attachment' => array(
 			'#type' => 'managed_file',
-      '#type' => 'file',
       '#title' => t('Choose a file to send as attachment'),
-    ),
+			'#description' => t('Perhaps an image file.'),
+    )
   );
 
   $form['submit'] = array(
