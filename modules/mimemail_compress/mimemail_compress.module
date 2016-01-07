@@ -6,12 +6,13 @@
  */
 
 /**
- * Implements mail_post_process().
+ * Implements hook_mail_alter().
  */
-function mimemail_compress_mail_post_process(&$message, $mailkey) {
+function mimemail_compress_mail_alter(&$message) {
   module_load_include('inc', 'mimemail_compress');
+  $mailbody = $message['body'][0];
   // Separate CSS from HTML for processing.
-  $parts = mimemail_compress_clean_message($message);
+  $parts = mimemail_compress_clean_message($mailbody);
   // Compress HTML and CSS into combined message.
   if (!empty($parts)) {
     $output = new mimemail_compress($parts['html'], $parts['css']);
