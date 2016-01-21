@@ -2,5 +2,4 @@ name = Mime Mail Example
 description = Example of how to use the Mime Mail module.
 dependencies[] = mimemail
 package = Example modules
-version = BACKDROP_VERSION
 backdrop = 1.x

@@ -487,8 +487,8 @@ function _mimemail_url($url, $to_embed = NULL) {
   }
 
   // Get a list of enabled languages.
-  $languages = language_list('enabled');
-  $languages = $languages[1];
+  $languages = language_list(TRUE, FALSE);
+  $languages = $languages['en'];
 
   // Default language settings.
   $prefix = '';
