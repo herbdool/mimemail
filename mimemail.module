@@ -398,7 +398,7 @@ function mimemail_prepare_message($message) {
   $message['subject'] = $subject;
   $message['body'] = $mail['body'];
   $message['headers'] = mimemail_headers($headers, $from);
-
+	$message['headers']['From'] = $message['headers']['Reply-to'];
   return $message;
 }
 
