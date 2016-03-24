@@ -32,11 +32,11 @@ function mimemail_admin_settings() {
   );
   $form['mimemail']['mimemail_mail'] = array(
     '#type'          => 'textfield',
-    '#title'         => t('Sender e-mail address'),
+    '#title'         => t('Sender email address'),
     '#default_value' => config_get('mimemail.settings', 'mimemail_mail'),
     '#size'          => 60,
     '#maxlength'     => 128,
-    '#description'   => t('The email address that all site e-mails will be from when using default engine.'),
+    '#description'   => t('The email address that all site emails will be from when using default engine.'),
   );
   $form['mimemail']['mimemail_simple_address'] = array(
     '#type'          => 'checkbox',
@@ -79,7 +79,7 @@ function mimemail_admin_settings() {
   }
   $form['mimemail']['mimemail_format'] = array(
     '#type' => 'select',
-    '#title' => t('E-mail format'),
+    '#title' => t('Email format'),
     '#options' => $format_options,
     '#default_value' => config_get('mimemail.settings', 'mimemail_format'),
     '#access' => count($formats) > 1,
@@ -127,7 +127,7 @@ function mimemail_admin_settings() {
   else {
     $form['mimemail']['mimemail_engine'] = array(
       '#type' => 'select',
-      '#title' => t('E-mail engine'),
+      '#title' => t('Email engine'),
       '#default_value' => config_get('mimemail.settings', 'mimemail_engine'),
       '#options' => $engine_options,
       '#description' => t('Choose an engine for sending mails from your site.'),

@@ -23,7 +23,7 @@ function mimemail_post() {
     $key = config_get('mimemail.settings', 'mimemail_key');
     $hash = hash_hmac('sha1', $_POST['message'], $key);
     if ($hash != $_POST['token']) {
-      watchdog('access denied', 'Authentication error for POST e-mail', WATCHDOG_WARNING);
+      watchdog('access denied', 'Authentication error for POST email', WATCHDOG_WARNING);
       return backdrop_access_denied();
     }
     else {

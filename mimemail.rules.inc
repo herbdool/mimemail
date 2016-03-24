@@ -14,13 +14,13 @@
 function mimemail_rules_action_info() {
   return array(
     'mimemail' => array(
-      'label' => t('Send HTML e-mail'),
+      'label' => t('Send HTML email'),
       'group' => t('System'),
       'parameter' => array(
         'key' => array(
           'type' => 'text',
           'label' => t('Key'),
-          'description' => t('A key to identify the e-mail sent.'),
+          'description' => t('A key to identify the email sent.'),
         ),
         'to' => array(
           'type' => 'text',
@@ -47,20 +47,20 @@ function mimemail_rules_action_info() {
         ),
         'from_mail' => array(
           'type' => 'text',
-          'label' => t('Sender e-mail address'),
+          'label' => t('Sender email address'),
           'description' => t("The sender's address. Leave it empty to use the site-wide configured address."),
           'optional' => TRUE,
         ),
         'reply_to' => array(
           'type' => 'text',
-          'label' => t('Reply e-mail address'),
+          'label' => t('Reply email address'),
           'description' => t("The address to reply to. Leave it empty to use the sender's address."),
           'optional' => TRUE,
         ),
         'list_unsubscribe' => array(
           'type' => 'text',
-          'label' => t('Unsubscription e-mail and/or URL'),
-          'description' => t("An e-mail address and/or a URL which can be used for unsubscription. Values must be enclosed by angel brackets and separated by a comma."),
+          'label' => t('Unsubscription email and/or URL'),
+          'description' => t("An email address and/or a URL which can be used for unsubscription. Values must be enclosed by angel brackets and separated by a comma."),
           'optional' => TRUE,
         ),
         'subject' => array(
@@ -110,7 +110,7 @@ function mimemail_rules_action_info() {
         'key' => array(
           'type' => 'text',
           'label' => t('Key'),
-          'description' => t('A key to identify the e-mail sent.'),
+          'description' => t('A key to identify the email sent.'),
         ),
         'roles' => array(
           'type' => 'list<integer>',
@@ -131,7 +131,7 @@ function mimemail_rules_action_info() {
         ),
         'from_mail' => array(
           'type' => 'text',
-          'label' => t('Sender e-mail address'),
+          'label' => t('Sender email address'),
           'description' => t("The sender's address. Leave it empty to use the site-wide configured address."),
           'optional' => TRUE,
         ),
