@@ -398,7 +398,11 @@ function mimemail_prepare_message($message) {
   $message['subject'] = $subject;
   $message['body'] = $mail['body'];
   $message['headers'] = mimemail_headers($headers, $from);
-	$message['headers']['From'] = $message['headers']['Reply-to'];
+  // if 'Reply-to' is set, set 'From' to the same value
+  // to avoid interpretation as spam.
+	if(isset($message['headers']['Reply-to'])){
+	  $message['headers']['From'] = $message['headers']['Reply-to'];
+	}
   return $message;
 }
 
