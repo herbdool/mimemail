@@ -10,7 +10,7 @@
  */
 class MimeMailSystem implements MailSystemInterface {
   /**
-   * Concatenate and wrap the e-mail body for HTML mails.
+   * Concatenate and wrap the email body for HTML mails.
    *
    * @param array $message
    *   A message array, as described in hook_mail_alter() with optional
@@ -42,7 +42,7 @@ class MimeMailSystem implements MailSystemInterface {
     return $message;
   }
   /**
-   * Send an HTML e-mail message, using Backdrop variables and default settings.
+   * Send an HTML email message, using Backdrop variables and default settings.
    *
    * @param array $message
    *   A message array, as described in hook_mail_alter() with optional

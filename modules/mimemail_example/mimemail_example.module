@@ -88,7 +88,7 @@ function mimemail_example_form() {
       '#title' => t('Subject'),
     ),
     'body' => array(
-      '#type' => 'textarea',
+			'#type' => 'text_format',
       '#title' => t('HTML message'),
     ),
     'plain' => array(
@@ -108,7 +108,7 @@ function mimemail_example_form() {
       '#title' => t('Choose a file to send as attachment'),
 			'#description' => t('Perhaps an image file.'),
     )
-  );
+	);
 
   $form['submit'] = array(
     '#type' => 'submit',
@@ -127,11 +127,10 @@ function mimemail_example_form_validate($form, &$form_state) {
   if (!valid_email_address($values['to'])) {
     form_set_error('to', t('That e-mail address is not valid.'));
   }
-
   $file = file_load($values['params']['attachment']);
   if ($file) {
     $values['params']['attachments'][0] = array(
-      'filepath' => $file->uri,
+		  'filepath' => $file->uri,
     );
   }
 }

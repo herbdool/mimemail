@@ -9,12 +9,12 @@
  * Implements hook_enable().
  */
 function mimemail_example_enable() {
-  mailsystem_set(array('mimemail_example' => 'MimeMailSystem'));
+  config_set('system.mail','mimemail_example','MimeMailSystem');
 }
 
 /**
  * Implements hook_disable().
  */
 function mimemail_example_disable() {
-  mailsystem_clear(array('mimemail_example' => 'MimeMailSystem'));
+  config_set('system.mail','mimemail_example','');
 }

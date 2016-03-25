@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Common mail functions for sending e-mail. Originally written by Gerhard.
+ * Common mail functions for sending email. Originally written by Gerhard.
  *
  *   Allie Micka <allie at pajunas dot com>
  */
