@@ -1,6 +1,5 @@
 name = Mime Mail
 description = Send MIME-encoded emails with embedded images and attachments.
-dependencies[] = mailsystem
 package = Mail
 backdrop = 1.x
 type = module
