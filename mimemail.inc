@@ -486,21 +486,21 @@ function _mimemail_url($url, $to_embed = NULL) {
     return '#' . $fragment;
   }
 
-  // Get a list of enabled languages.
+  // Get a list,as objects, of enabled languages.
   $languages = language_list(TRUE, FALSE);
-  $languages = $languages['en'];
 
   // Default language settings.
   $prefix = '';
   $language = language_default();
 
-  // Check for language prefix.
+  // Check for language prefix and override default
+	// if a match is found.
   $path = trim($path, '/');
   $args = explode('/', $path);
   foreach ($languages as $lang) {
-    if (!empty($args) && $args[0] == $lang->prefix) {
+    if (!empty($args) && $args[0] == $lang->langcode) {
       $prefix = array_shift($args);
-      $language = $lang;
+      $language = $lang->langcode;
       $path = implode('/', $args);
       break;
     }
