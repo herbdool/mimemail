@@ -486,7 +486,7 @@ function _mimemail_url($url, $to_embed = NULL) {
     return '#' . $fragment;
   }
 
-  // Get a list,as objects, of enabled languages.
+  // Get a list, as objects, of enabled languages.
   $languages = language_list(TRUE, FALSE);
 
   // Default language settings.
@@ -494,7 +494,7 @@ function _mimemail_url($url, $to_embed = NULL) {
   $language = language_default();
 
   // Check for language prefix and override default
-	// if a match is found.
+  // if a match is found.
   $path = trim($path, '/');
   $args = explode('/', $path);
   foreach ($languages as $lang) {
