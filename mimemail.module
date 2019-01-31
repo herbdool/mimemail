@@ -14,8 +14,8 @@ function mimemail_config_info() {
     'group' => t('mimemail'),
   );
   return $prefixes;
-}  
- 
+}
+
 /**
  * Implements hook_menu().
  */
@@ -338,7 +338,7 @@ function mimemail_prepare_message($message) {
 
   // Override site mails default sender when using default engine.
   if ((empty($from) || $from == $site_mail)
-      && config_get('mimemail.settings', 'mimemail_engine') == 'mimemail') {
+    && config_get('mimemail.settings', 'mimemail_engine') == 'mimemail') {
     $mimemail_name = config_get('mimemail.settings', 'mimemail_name');
     $mimemail_mail = config_get('mimemail.settings', 'mimemail_mail');
     $from = array(
@@ -370,7 +370,7 @@ function mimemail_prepare_message($message) {
 
   $hook = array(
     'mimemail_message__' . $key,
-    'mimemail_message__' . $module .'__'. $key,
+    'mimemail_message__' . $module . '__' . $key,
   );
 
   $variables = array(
@@ -404,15 +404,9 @@ function mimemail_prepare_message($message) {
 
 /**
  * Implements hook_autoload_info().
-
  */
-function mimemail_autoload_info()
-{
+function mimemail_autoload_info() {
   return array(
-    'MimeMailUnitTestCase' => 'tests/mimemail.test',
-    'MimeMailWebTestCase' => 'tests/mimemail.test',
-    'MimeMailCompressUnitTestCase' => 'tests/mimemail_compress.test',
-    'MimeMailRulesTestCase' => 'tests/mimemail_rules.test',
     'MimeMailSystem' => 'includes/mimemail.mail.inc',
   );
 }
