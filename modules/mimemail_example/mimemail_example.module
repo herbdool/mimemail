@@ -13,7 +13,7 @@ function mimemail_example_menu() {
     'title' => 'Mime Mail Example',
     'page callback' => 'backdrop_get_form',
     'page arguments' => array('mimemail_example_form'),
-    'access arguments' => array('access content'),
+    'access arguments' => array('use mimemail example'),
   );
 
   return $items;
@@ -54,13 +54,13 @@ function mimemail_example_form() {
   $form['from'] = array(
     '#type' => 'textfield',
     '#title' => t('Sender name'),
-    '#default_value' => config_get('mimemail.settings','mimemail_name')
+    '#default_value' => config_get('mimemail.settings', 'mimemail_name')
   );
 
   $form['from_mail'] = array(
     '#type' => 'textfield',
     '#title' => t('Sender e-mail address'),
-    '#default_value' => config_get('mimemail.settings','mimemail_mail')
+    '#default_value' => config_get('mimemail.settings', 'mimemail_mail')
   );
 
   $form['params'] = array(
@@ -77,7 +77,7 @@ function mimemail_example_form() {
       'Reply-to' => array(
         '#type' => 'textfield',
         '#title' => t('Reply to'),
-        '#default_value' => config_get('mimemail.settings','mimemail_mail'),
+        '#default_value' => config_get('mimemail.settings', 'mimemail_mail'),
       ),
       'List-unsubscribe' => array(
         '#type' => 'textfield',
@@ -89,7 +89,7 @@ function mimemail_example_form() {
       '#title' => t('Subject'),
     ),
     'body' => array(
-			'#type' => 'text_format',
+      '#type' => 'text_format',
       '#title' => t('HTML message'),
     ),
     'plain' => array(
@@ -105,11 +105,11 @@ function mimemail_example_form() {
       '#title' => t('Plain text message'),
     ),
     'attachment' => array(
-			'#type' => 'managed_file',
+      '#type' => 'managed_file',
       '#title' => t('Choose a file to send as attachment'),
-			'#description' => t('Perhaps an image file.'),
+      '#description' => t('Perhaps an image file.'),
     )
-	);
+  );
 
   $form['submit'] = array(
     '#type' => 'submit',
@@ -131,7 +131,7 @@ function mimemail_example_form_validate($form, &$form_state) {
   $file = file_load($values['params']['attachment']);
   if ($file) {
     $values['params']['attachments'][0] = array(
-		  'filepath' => $file->uri,
+      'filepath' => $file->uri,
     );
   }
 }
@@ -147,10 +147,10 @@ function mimemail_example_form_submit($form, &$form_state) {
   $to = $values['to'];
   $language = language_default();
   $params = $values['params'];
-	// CKeditor has $body as an array with two elements.
-	// We need these separated.
-	$params['format'] = $params['body']['format'];
-	$params['body'] = $params['body']['value'];
+  // CKeditor has $body as an array with two elements.
+  // We need these separated.
+  $params['format'] = $params['body']['format'];
+  $params['body'] = $params['body']['value'];
   if (!empty($values['from_mail'])) {
     module_load_include('inc', 'mimemail');
     $from = mimemail_address(array(
@@ -171,4 +171,18 @@ function mimemail_example_form_submit($form, &$form_state) {
   else {
     backdrop_set_message(t('There was a problem sending your message and it was not sent.'), 'error');
   }
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * Defines a permission for using Mime Mail Example.
+ */
+function mimemail_example_permission() {
+  return array(
+    'use mimemail example' => array(
+      'title' => t('Use mimemail example'),
+      'description' => t('Allow use of Mime Mail Example'),
+    ),
+  );
 }
