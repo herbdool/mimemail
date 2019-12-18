@@ -115,7 +115,7 @@ function mimemail_rules_action_info() {
         'roles' => array(
           'type' => 'list<integer>',
           'label' => t('Roles'),
-          'options list' => 'entity_metadata_user_roles',
+          'options list' => 'entity_plus_metadata_user_roles',
           'description' => t('Select the roles whose users should receive the mail.'),
         ),
         'active' => array(
@@ -308,7 +308,7 @@ function rules_action_mimemail_to_users_of_role($key, $roles, $active, $from_nam
     $query->condition('u.status', 1, '=');
   }
 
-  if (in_array(BACKDROP_AUTHENTICATED_RID, $roles)) {
+  if (in_array(BACKDROP_AUTHENTICATED_ROLE, $roles)) {
     $query->condition('u.uid', 0, '>');
   }
   else {
