@@ -22,6 +22,7 @@ function mimemail_admin_settings() {
   }
 
   $form = array();
+  $form['#config'] = 'mimemail.settings';
   $form['mimemail']['mimemail_name'] = array(
     '#type'          => 'textfield',
     '#title'         => t('Sender name'),
@@ -150,29 +151,5 @@ function mimemail_admin_settings() {
     backdrop_set_message(t('Please choose a mail engine.'), 'error');
   }
 
-  $form['#submit'][] = 'mimemail_admin_settings_submit';
-  // Add a submit button
-  $form['actions']['#type'] = 'actions';
-  $form['actions']['submit'] = array(
-    '#type' => 'submit',
-    '#value' => t('Save configuration'),
-  );
-  // Return the form!
-  return $form;
-}
-
-
-
-/**
- * Form submission handler for mimemail_configuration_form().
- */
-function mimemail_admin_settings_submit($form, &$form_state) {
-$config = config('mimemail.settings');
-foreach ($form_state['values'] as $key => $value)
-{
-$config->set($key, $value);
-}
-
-$config->save();
-backdrop_set_message(t('The configuration options have been saved.'));
+  return system_settings_form($form);
 }
