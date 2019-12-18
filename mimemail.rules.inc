@@ -94,7 +94,7 @@ function mimemail_rules_action_info() {
           'type' => 'token',
           'label' => t('Language'),
           'description' => t('If specified, the language used for getting the mail message and subject.'),
-          'options list' => 'entity_metadata_language_list',
+          'options list' => 'entity_plus_metadata_language_list',
           'optional' => TRUE,
           'default value' => LANGUAGE_NONE,
           'default mode' => 'selector',
@@ -313,7 +313,7 @@ function rules_action_mimemail_to_users_of_role($key, $roles, $active, $from_nam
   }
   else {
     $query->join('users_roles', 'r', 'u.uid = r.uid');
-    $query->condition('r.rid', $roles, 'IN');
+    $query->condition('r.role', $roles, 'IN');
     $query->distinct();
   }
 
